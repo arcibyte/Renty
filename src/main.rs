@@ -1,4 +1,7 @@
 mod task;
+mod planner;
+
 fn main() {
-    println!("Welcome to WeekPlanner!");
+    println!("WeekPlanner started!");
+    let _planner = planner::Planner::new();
 }
