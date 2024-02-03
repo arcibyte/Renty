@@ -5,8 +5,17 @@ pub struct Planner {
 }
 
 impl Planner {
+    pub fn new() -> Self {
+        Planner {
+            tasks: Vec::new(),
+        }
+    }
 
     pub fn add_task(&mut self, description: String) {
+        let id = (self.tasks.len() as u32) + 1;
+        let task = Task::new(id, description);
+        self.tasks.push(task);
+    }
 
     pub fn list_tasks(&self) {
         if self.tasks.is_empty() {
@@ -14,16 +23,22 @@ impl Planner {
             return;
         }
         for task in &self.tasks {
-            println!("[{}] {} - {}", task.id, if task.completed { "x" } else { " " }, task.description);
+            println!(
+                "[{}] {} - {}",
+                task.id,
+                if task.completed { "x" } else { " " },
+                task.description
+            );
         }
     }
-        let id = (self.tasks.len() as u32) + 1;
-        let task = Task::new(id, description);
-        self.tasks.push(task);
-    }
-    pub fn new() -> Self {
-        Planner {
-            tasks: Vec::new(),
+
+    pub fn mark_task_complete(&mut self, id: u32) -> bool {
+        for task in &mut self.tasks {
+            if task.id == id {
+                task.completed = true;
+                return true;
+            }
         }
+        false
     }
 }
