@@ -7,6 +7,16 @@ pub struct Planner {
 impl Planner {
 
     pub fn add_task(&mut self, description: String) {
+
+    pub fn list_tasks(&self) {
+        if self.tasks.is_empty() {
+            println!("No tasks available.");
+            return;
+        }
+        for task in &self.tasks {
+            println!("[{}] {} - {}", task.id, if task.completed { "x" } else { " " }, task.description);
+        }
+    }
         let id = (self.tasks.len() as u32) + 1;
         let task = Task::new(id, description);
         self.tasks.push(task);
