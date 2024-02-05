@@ -41,4 +41,13 @@ impl Planner {
         }
         false
     }
+    pub fn remove_task(&mut self, id: u32) -> bool {
+    if let Some(pos) = self.tasks.iter().position(|t| t.id == id) {
+        self.tasks.remove(pos);
+        true
+    } else {
+        false
+    }
+}
+
 }
