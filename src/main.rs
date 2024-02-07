@@ -23,6 +23,7 @@ fn main() {
                     println!("Task description cannot be empty.");
                 } else {
                     planner.add_task(description);
+                    planner.save().unwrap();
                     println!("Task added.");
                 }
             }
@@ -32,6 +33,7 @@ fn main() {
             "complete" => {
                 let id = input("Enter task ID to complete: ").parse::<u32>().unwrap_or(0);
                 if planner.mark_task_complete(id) {
+                    planner.save().unwrap();
                     println!("Task marked complete.");
                 } else {
                     println!("Task not found.");
@@ -40,6 +42,7 @@ fn main() {
             "remove" => {
                 let id = input("Enter task ID to remove: ").parse::<u32>().unwrap_or(0);
                 if planner.remove_task(id) {
+                    planner.save().unwrap();
                     println!("Task removed.");
                 } else {
                     println!("Task not found.");

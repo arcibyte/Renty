@@ -1,3 +1,4 @@
+use crate::storage::{load_tasks, save_tasks};
 use crate::task::Task;
 
 pub struct Planner {
@@ -6,9 +7,8 @@ pub struct Planner {
 
 impl Planner {
     pub fn new() -> Self {
-        Planner {
-            tasks: Vec::new(),
-        }
+        let tasks = load_tasks().unwrap_or_else(|_| Vec::new());
+        Planner { tasks }
     }
 
     pub fn add_task(&mut self, description: String) {
@@ -41,13 +41,17 @@ impl Planner {
         }
         false
     }
-    pub fn remove_task(&mut self, id: u32) -> bool {
-    if let Some(pos) = self.tasks.iter().position(|t| t.id == id) {
-        self.tasks.remove(pos);
-        true
-    } else {
-        false
-    }
-}
 
+    pub fn remove_task(&mut self, id: u32) -> bool {
+        if let Some(pos) = self.tasks.iter().position(|t| t.id == id) {
+            self.tasks.remove(pos);
+            true
+        } else {
+            false
+        }
+    }
+
+    pub fn save(&self) -> std::io::Result<()> {
+        save_tasks(&self.tasks)
+    }
 }
