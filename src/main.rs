@@ -14,7 +14,7 @@ fn main() {
     let mut planner = planner::Planner::new();
 
     loop {
-        let command = input("\nEnter command (add, list, complete, remove, exit): ");
+        let command = input("\nEnter command (add, list, complete, remove, edit, exit): ");
 
         match command.as_str() {
             "add" => {
@@ -44,6 +44,24 @@ fn main() {
                 if planner.remove_task(id) {
                     planner.save().unwrap();
                     println!("Task removed.");
+                } else {
+                    println!("Task not found.");
+                }
+            }
+            "edit" => {
+                let id = input("Enter task ID to edit: ").parse::<u32>().unwrap_or(0);
+                if id == 0 {
+                    println!("Invalid ID.");
+                    continue;
+                }
+                let new_description = input("Enter new task description: ");
+                if new_description.is_empty() {
+                    println!("Description cannot be empty.");
+                    continue;
+                }
+                if planner.edit_task_description(id, new_description) {
+                    planner.save().unwrap();
+                    println!("Task description updated.");
                 } else {
                     println!("Task not found.");
                 }

@@ -54,4 +54,13 @@ impl Planner {
     pub fn save(&self) -> std::io::Result<()> {
         save_tasks(&self.tasks)
     }
+    pub fn edit_task_description(&mut self, id: u32, new_description: String) -> bool {
+        for task in &mut self.tasks {
+            if task.id == id {
+                task.description = new_description;
+                return true;
+            }
+        }
+        false
+    }
 }
