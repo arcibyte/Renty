@@ -1,6 +1,7 @@
 use std::io::{self, Write};
 mod task;
 mod planner;
+mod storage;
 
 fn input(prompt: &str) -> String {
     print!("{}", prompt);
