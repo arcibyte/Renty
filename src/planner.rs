@@ -1,5 +1,6 @@
 use crate::storage::{load_tasks, save_tasks};
 use crate::task::Task;
+use chrono::NaiveDate;
 
 pub struct Planner {
     pub tasks: Vec<Task>,
@@ -11,9 +12,9 @@ impl Planner {
         Planner { tasks }
     }
 
-    pub fn add_task(&mut self, description: String) {
+    pub fn add_task(&mut self, description: String, due_date: Option<NaiveDate>) {
         let id = (self.tasks.len() as u32) + 1;
-        let task = Task::new(id, description);
+        let task = Task::new(id, description, due_date);
         self.tasks.push(task);
     }
 
@@ -23,11 +24,16 @@ impl Planner {
             return;
         }
         for task in &self.tasks {
+            let due = match task.due_date {
+                Some(date) => date.format("%Y-%m-%d").to_string(),
+                None => "No due date".to_string(),
+            };
             println!(
-                "[{}] {} - {}",
+                "[{}] {} - {} (Due: {})",
                 task.id,
                 if task.completed { "x" } else { " " },
-                task.description
+                task.description,
+                due
             );
         }
     }
@@ -51,9 +57,6 @@ impl Planner {
         }
     }
 
-    pub fn save(&self) -> std::io::Result<()> {
-        save_tasks(&self.tasks)
-    }
     pub fn edit_task_description(&mut self, id: u32, new_description: String) -> bool {
         for task in &mut self.tasks {
             if task.id == id {
@@ -62,5 +65,9 @@ impl Planner {
             }
         }
         false
+    }
+
+    pub fn save(&self) -> std::io::Result<()> {
+        save_tasks(&self.tasks)
     }
 }
